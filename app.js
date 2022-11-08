@@ -1,13 +1,21 @@
+// core modules
 const fs = require("fs");
 const http = require("http");
 const url = require("url");
+// npm modules
+const slugify = require("slugify");
+// proprietary modules
 const { retrieveCard, overviewCards, httpHead } = require("./utils");
+////////////////////////////////////////////////////////////////////////
 
 // VARIABLES
 const port = 8000;
+
 const data = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8")
 );
+const slugs = data.map((el) => slugify(el.productName, { lower: true }));
+
 const template_CARD = fs.readFileSync(
   `${__dirname}/templates/card.html`,
   "utf-8"
@@ -20,6 +28,7 @@ const template_PRODUCT = fs.readFileSync(
   `${__dirname}/templates/product.html`,
   "utf8"
 );
+////////////////////////////////////////////////////////////////////////
 
 // SERVER
 const server = http.createServer((req, res) => {
@@ -44,5 +53,4 @@ const server = http.createServer((req, res) => {
 server.listen(port, "127.0.0.1", () => {
   console.log(`Server running on port ${port}`);
 });
-
-////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
